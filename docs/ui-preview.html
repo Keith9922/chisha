@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>吃啥 · UI 预览</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #EFEAE2;
+      --bg-app: #FAF7F2;
+      --bg-card: #FFFFFF;
+      --text-primary: #1A1A1A;
+      --text-secondary: #6B6760;
+      --text-tertiary: #A8A39A;
+      --accent: #E97A45;
+      --accent-soft: #FCEEE2;
+      --success: #7CA982;
+      --success-soft: #E5EEE2;
+      --warning: #C75146;
+      --warning-soft: #FBE9E5;
+      --carb: #E5B85F;
+      --border: #EAE5DC;
+      --border-soft: #F0EBE2;
+      --shadow-sm: 0 1px 2px rgba(60, 50, 30, 0.04);
+      --shadow-md: 0 1px 3px rgba(60, 50, 30, 0.06), 0 6px 20px rgba(60, 50, 30, 0.05);
+      --serif: 'IBM Plex Serif', Georgia, 'Songti SC', serif;
+      --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg-page);
+      min-height: 100vh;
+      padding: 56px 20px 80px;
+      color: var(--text-primary);
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+
+    .page-header .sub {
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .screens {
+      display: flex;
+      gap: 56px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* === Phone Frame === */
+    .phone-wrap {
+      position: relative;
+    }
+
+    .phone-label {
+      position: absolute;
+      top: -36px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    .phone {
+      width: 380px;
+      height: 800px;
+      background: var(--bg-app);
+      border-radius: 44px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 8px #1c1c1e,
+        0 0 0 10px #2c2c2e,
+        0 30px 80px rgba(40, 30, 20, 0.18);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* iOS-like notch */
+    .notch {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 24px;
+      background: #1c1c1e;
+      border-radius: 14px;
+      z-index: 10;
+    }
+
+    .status-bar {
+      height: 44px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 28px;
+      font-size: 14px;
+      font-weight: 600;
+      flex-shrink: 0;
+      padding-top: 8px;
+    }
+
+    .signals {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      font-size: 11px;
+    }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 20px;
+    }
+
+    .content::-webkit-scrollbar { display: none; }
+
+    /* Bottom nav */
+    .bottom-nav {
+      height: 80px;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-soft);
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      padding: 12px 16px 24px;
+      flex-shrink: 0;
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-tertiary);
+      font-size: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-item.active { color: var(--accent); }
+
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* === Page 1: Recording === */
+    .greeting {
+      padding: 12px 4px 24px;
+    }
+
+    .greeting h2 {
+      font-size: 26px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .greeting .meta {
+      color: var(--text-secondary);
+      font-size: 12px;
+      margin-top: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .dashboard {
+      background: var(--bg-card);
+      border-radius: 24px;
+      padding: 28px 24px 24px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 24px;
+    }
+
+    .dashboard-main {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .big-number {
+      font-family: var(--serif);
+      font-size: 64px;
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .big-number .of {
+      font-size: 18px;
+      color: var(--text-tertiary);
+      margin-left: 6px;
+      font-weight: 300;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 5px;
+      background: var(--accent-soft);
+      border-radius: 3px;
+      margin: 18px 0 12px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 3px;
+      width: 33%;
+    }
+
+    .dashboard-caption {
+      font-size: 12px;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+    }
+
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      padding: 18px 0;
+      border-top: 1px solid var(--border-soft);
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: var(--serif);
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .stat-value .small {
+      color: var(--text-tertiary);
+      font-size: 13px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+      letter-spacing: 0.05em;
+    }
+
+    .macros {
+      padding-top: 18px;
+    }
+
+    .macro-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 9px;
+    }
+
+    .macro-label {
+      width: 28px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .macro-bar {
+      flex: 1;
+      height: 5px;
+      background: var(--border-soft);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .macro-fill {
+      height: 100%;
+      border-radius: 3px;
+    }
+
+    .macro-value {
+      width: 36px;
+      text-align: right;
+      font-size: 11px;
+      color: var(--text-primary);
+      font-family: var(--serif);
+      font-weight: 400;
+    }
+
+    .meals-section {
+      margin-top: 20px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      padding-left: 4px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .meal-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .meal-card.empty {
+      background: transparent;
+      border: 1px dashed var(--border);
+      box-shadow: none;
+    }
+
+    .meal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .meal-title {
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .meal-card.empty .meal-title { color: var(--text-tertiary); font-weight: 400; }
+
+    .meal-emoji { font-size: 16px; }
+
+    .meal-cal {
+      font-family: var(--serif);
+      font-size: 17px;
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    .meal-items {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-soft);
+    }
+
+    .meal-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .meal-item-cal {
+      font-family: var(--serif);
+      color: var(--text-primary);
+    }
+
+    .add-icon {
+      color: var(--text-tertiary);
+      font-size: 18px;
+      font-weight: 300;
+    }
+
+    /* === Page 2: AI Chat === */
+    .chat-header {
+      padding: 12px 4px 16px;
+      border-bottom: 1px solid var(--border-soft);
+      margin-bottom: 16px;
+    }
+
+    .chat-header h2 {
+      font-size: 22px;
+      font-weight: 500;
+    }
+
+    .mini-status {
+      display: flex;
+      gap: 18px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .mini-status strong {
+      color: var(--accent);
+      font-family: var(--serif);
+      font-weight: 500;
+      margin-right: 2px;
+    }
+
+    .messages { padding-bottom: 80px; display: flex; flex-direction: column; }
+
+    .day-divider {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin: 10px 0 14px;
+      letter-spacing: 0.1em;
+      position: relative;
+    }
+    .day-divider::before, .day-divider::after {
+      content: '';
+      display: inline-block;
+      width: 32px;
+      height: 1px;
+      background: var(--border);
+      vertical-align: middle;
+      margin: 0 10px;
+    }
+
+    .msg {
+      margin-bottom: 14px;
+      max-width: 85%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .msg.user { align-self: flex-end; align-items: flex-end; }
+    .msg.ai { align-self: flex-start; align-items: flex-start; }
+
+    .msg-bubble {
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .msg.ai .msg-bubble {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border-bottom-left-radius: 6px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .msg.user .msg-bubble {
+      background: var(--accent);
+      color: white;
+      border-bottom-right-radius: 6px;
+    }
+
+    .msg.ai.roast .msg-bubble {
+      background: var(--warning-soft);
+      color: var(--warning);
+      border-left: 3px solid var(--warning);
+    }
+
+    .msg-meta {
+      font-size: 10px;
+      color: var(--text-tertiary);
+      margin-top: 4px;
+      padding: 0 4px;
+    }
+
+    .quick-action {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 12px;
+      background: var(--accent-soft);
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .chat-input {
+      position: absolute;
+      bottom: 96px;
+      left: 16px;
+      right: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .chat-input input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      color: var(--text-primary);
+      background: transparent;
+      font-family: var(--sans);
+    }
+
+    .chat-input input::placeholder { color: var(--text-tertiary); }
+
+    .chat-input .mic {
+      color: var(--text-secondary);
+      font-size: 18px;
+    }
+
+    /* === Page 3: History === */
+    .history-header { padding: 12px 4px 24px; }
+    .history-header h2 { font-size: 26px; font-weight: 400; letter-spacing: -0.01em; }
+
+    .week-card {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 22px 20px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 24px;
+    }
+
+    .week-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 18px;
+    }
+
+    .week-title h3 {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    .achievement {
+      font-family: var(--serif);
+      font-size: 22px;
+      color: var(--success);
+      font-weight: 400;
+    }
+    .achievement .of { color: var(--text-tertiary); font-size: 14px; }
+
+    .week-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .day-cell {
+      aspect-ratio: 1;
+      border-radius: 10px;
+      background: var(--border-soft);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      font-size: 9px;
+      color: var(--text-secondary);
+    }
+
+    .day-cell.met {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .day-cell.over {
+      background: var(--warning-soft);
+      color: var(--warning);
+    }
+
+    .day-cell.today {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 4px 12px rgba(233, 122, 69, 0.3);
+    }
+
+    .day-cell .day-num {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: 14px;
+    }
+
+    .day-list { margin-top: 24px; padding-bottom: 16px; }
+
+    .day-row {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .day-row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .day-row-title {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .day-row-status {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+
+    .day-row-status.met {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .day-row-status.over {
+      background: var(--warning-soft);
+      color: var(--warning);
+    }
+
+    .day-row-detail {
+      display: flex;
+      gap: 14px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .day-row-detail strong {
+      font-family: var(--serif);
+      color: var(--text-primary);
+      font-weight: 500;
+      margin-right: 2px;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 80px;
+      color: var(--text-tertiary);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .swatch-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .swatch-chip {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+
+    .swatch-chip::after {
+      content: attr(data-name);
+      position: absolute;
+      top: 42px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px;
+      color: var(--text-tertiary);
+      white-space: nowrap;
+    }
+
+    /* === Add-food Modal === */
+    .scrim {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(20, 15, 10, 0.32);
+      backdrop-filter: blur(2px);
+      z-index: 50;
+    }
+
+    .modal-sheet {
+      position: absolute;
+      bottom: 80px;
+      left: 0;
+      right: 0;
+      background: var(--bg-app);
+      border-top-left-radius: 28px;
+      border-top-right-radius: 28px;
+      padding: 12px 20px 24px;
+      z-index: 51;
+      box-shadow: 0 -10px 40px rgba(40, 30, 20, 0.18);
+    }
+
+    .modal-handle {
+      width: 40px;
+      height: 4px;
+      background: #D5CFC4;
+      border-radius: 2px;
+      margin: 0 auto 18px;
+    }
+
+    .modal-header {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      padding: 0 4px;
+    }
+
+    .modal-header .accent {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .modal-search {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .modal-search .icon { font-size: 14px; color: var(--text-tertiary); }
+
+    .modal-search input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text-primary);
+      font-family: var(--sans);
+      font-size: 14px;
+    }
+
+    .picked-item {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 16px;
+    }
+
+    .picked-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+
+    .picked-name {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .picked-brand {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+    }
+
+    .picked-cal {
+      text-align: right;
+      line-height: 1;
+    }
+
+    .picked-cal .num {
+      font-family: var(--serif);
+      font-size: 28px;
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    .picked-cal .unit {
+      font-size: 10px;
+      color: var(--text-secondary);
+      margin-left: 2px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-top: 1px solid var(--border-soft);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .row.first { margin-top: 8px; }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stepper .num {
+      font-family: var(--serif);
+      font-size: 15px;
+      color: var(--text-primary);
+      min-width: 24px;
+      text-align: center;
+    }
+
+    .stepper-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 13px;
+      background: var(--bg-app);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 300;
+    }
+
+    .nutrient-row {
+      display: flex;
+      gap: 16px;
+      padding: 12px 0 0;
+      margin-top: 4px;
+      border-top: 1px solid var(--border-soft);
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .nutrient-row strong {
+      color: var(--text-primary);
+      font-family: var(--serif);
+      font-weight: 500;
+      margin-right: 3px;
+    }
+
+    .confirm-btn {
+      background: var(--accent);
+      color: white;
+      text-align: center;
+      padding: 16px;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 500;
+      box-shadow: 0 6px 16px rgba(233, 122, 69, 0.25);
+      letter-spacing: 0.02em;
+    }
+
+    .confirm-btn .serif {
+      font-family: var(--serif);
+      font-weight: 400;
+      margin: 0 4px;
+    }
+
+    @media (max-width: 1280px) {
+      .screens { gap: 80px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <h1>吃啥 <span style="color: var(--text-tertiary); font-weight: 300;">/ chisha</span></h1>
+    <div class="sub">对话式饮食管理 · V1 设计草稿 · 2026.05</div>
+  </div>
+
+  <div class="screens">
+
+    <!-- ============ Page 1: Recording ============ -->
+    <div class="phone-wrap">
+      <div class="phone-label">记录页</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar">
+          <span>10:23</span>
+          <span class="signals">●●●● 100%</span>
+        </div>
+
+        <div class="content">
+          <div class="greeting">
+            <h2>早安 ☀</h2>
+            <div class="meta">5 月 7 日 · 周三</div>
+          </div>
+
+          <div class="dashboard">
+            <div class="dashboard-main">
+              <div class="big-number">1580<span class="of">/ 1850</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width: 15%;"></div></div>
+              <div class="dashboard-caption">今日剩余 (kcal) · 含运动 +350</div>
+            </div>
+
+            <div class="dashboard-stats">
+              <div class="stat">
+                <div class="stat-value">32<span class="small"> / 120g</span></div>
+                <div class="stat-label">蛋白质</div>
+              </div>
+              <div class="stat">
+                <div class="stat-value" style="color: var(--success);">−350</div>
+                <div class="stat-label">运动消耗</div>
+              </div>
+              <div class="stat">
+                <div class="stat-value">13:30</div>
+                <div class="stat-label">距睡眠</div>
+              </div>
+            </div>
+
+            <div class="macros">
+              <div class="macro-row">
+                <div class="macro-label">碳水</div>
+                <div class="macro-bar"><div class="macro-fill" style="width: 35%; background: var(--carb);"></div></div>
+                <div class="macro-value">35%</div>
+              </div>
+              <div class="macro-row">
+                <div class="macro-label">蛋白</div>
+                <div class="macro-bar"><div class="macro-fill" style="width: 18%; background: var(--success);"></div></div>
+                <div class="macro-value">18%</div>
+              </div>
+              <div class="macro-row">
+                <div class="macro-label">脂肪</div>
+                <div class="macro-bar"><div class="macro-fill" style="width: 47%; background: var(--accent);"></div></div>
+                <div class="macro-value">47%</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="meals-section">
+            <div class="section-title">今日餐次</div>
+
+            <div class="meal-card">
+              <div class="meal-header">
+                <div class="meal-title">
+                  <span class="meal-emoji">🌅</span>
+                  <span>早餐 · 10:00</span>
+                </div>
+                <div class="meal-cal">620</div>
+              </div>
+              <div class="meal-items">
+                <div class="meal-item">
+                  <span>瑞幸 生椰拿铁 中杯</span>
+                  <span class="meal-item-cal">230</span>
+                </div>
+                <div class="meal-item">
+                  <span>全家 鸡肉三明治</span>
+                  <span class="meal-item-cal">390</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="meal-card empty">
+              <div class="meal-header">
+                <div class="meal-title">
+                  <span class="meal-emoji">🌞</span>
+                  <span>午餐 · 待记录</span>
+                </div>
+                <span class="add-icon">+</span>
+              </div>
+            </div>
+
+            <div class="meal-card empty">
+              <div class="meal-header">
+                <div class="meal-title">
+                  <span class="meal-emoji">🌙</span>
+                  <span>晚餐 · 待记录</span>
+                </div>
+                <span class="add-icon">+</span>
+              </div>
+            </div>
+
+            <div class="meal-card empty">
+              <div class="meal-header">
+                <div class="meal-title">
+                  <span class="meal-emoji">✨</span>
+                  <span>加餐 · 待记录</span>
+                </div>
+                <span class="add-icon">+</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="meals-section">
+            <div class="section-title">今日运动</div>
+
+            <div class="meal-card">
+              <div class="meal-header">
+                <div class="meal-title">
+                  <span class="meal-emoji">🏃</span>
+                  <span>晨跑 · 07:00</span>
+                </div>
+                <div class="meal-cal" style="color: var(--success);">−350</div>
+              </div>
+              <div class="meal-items">
+                <div class="meal-item">
+                  <span>5 km · 中强度 · 30 分钟</span>
+                  <span class="meal-item-cal" style="color: var(--success);">−350</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="meal-card empty">
+              <div class="meal-header">
+                <div class="meal-title">
+                  <span class="meal-emoji">＋</span>
+                  <span>添加运动</span>
+                </div>
+                <span class="add-icon">+</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item active">
+            <div class="nav-icon">📊</div>
+            <div>记录</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">💬</div>
+            <div>助手</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">📅</div>
+            <div>历史</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Page 2: AI Chat ============ -->
+    <div class="phone-wrap">
+      <div class="phone-label">AI 助手页</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar">
+          <span>02:11</span>
+          <span class="signals">●●●● 100%</span>
+        </div>
+
+        <div class="content">
+          <div class="chat-header">
+            <h2>问问 AI</h2>
+            <div class="mini-status">
+              <span><strong>30</strong> kcal 剩余</span>
+              <span><strong>02:00</strong> 截止</span>
+            </div>
+          </div>
+
+          <div class="messages">
+
+            <div class="day-divider">今天 上午</div>
+
+            <div class="msg ai">
+              <div class="msg-bubble">早，今天还剩 1230 kcal。要问点啥?</div>
+              <div class="msg-meta">10:24</div>
+            </div>
+
+            <div class="msg user">
+              <div class="msg-bubble">想喝霸王茶姬伯牙绝弦 行不行</div>
+              <div class="msg-meta">10:31</div>
+            </div>
+
+            <div class="msg ai">
+              <div class="msg-bubble">
+                伯牙绝弦无糖低脂版 ~150 kcal。<br>
+                喝完晚饭还剩 1080，没问题。
+                <div class="quick-action">→ 记一杯</div>
+              </div>
+              <div class="msg-meta">10:31</div>
+            </div>
+
+            <div class="day-divider">今天 傍晚</div>
+
+            <div class="msg user">
+              <div class="msg-bubble">刚跑了 5 公里</div>
+              <div class="msg-meta">19:45</div>
+            </div>
+
+            <div class="msg ai">
+              <div class="msg-bubble">
+                帅。按 70kg 算，约消耗 350 kcal。<br>
+                已记到运动消耗。预算变成 1580 / 1850。
+              </div>
+              <div class="msg-meta">19:45</div>
+            </div>
+
+            <div class="day-divider">深夜</div>
+
+            <div class="msg user">
+              <div class="msg-bubble">现在 1:30 想吃个泡面</div>
+              <div class="msg-meta">01:32</div>
+            </div>
+
+            <div class="msg ai roast">
+              <div class="msg-bubble">
+                凌晨 1:30。今天还剩 30 kcal。<br>
+                这碗泡面 500 kcal，直接超 25%。<br><br>
+                明天的体重秤会替我说话。<br><br>
+                <strong>真要吃就吃，我不拦你。</strong>
+              </div>
+              <div class="msg-meta">01:32</div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="chat-input">
+          <input type="text" placeholder="对 AI 说点啥..." />
+          <span class="mic">🎙</span>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item">
+            <div class="nav-icon">📊</div>
+            <div>记录</div>
+          </div>
+          <div class="nav-item active">
+            <div class="nav-icon">💬</div>
+            <div>助手</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">📅</div>
+            <div>历史</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Page 3: History ============ -->
+    <div class="phone-wrap">
+      <div class="phone-label">历史页</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar">
+          <span>10:23</span>
+          <span class="signals">●●●● 100%</span>
+        </div>
+
+        <div class="content">
+          <div class="history-header">
+            <h2>我的记录</h2>
+          </div>
+
+          <div class="week-card">
+            <div class="week-title">
+              <h3>本周达标</h3>
+              <span class="achievement">4<span class="of"> / 7</span></span>
+            </div>
+            <div class="week-days">
+              <div class="day-cell met"><div>一</div><div class="day-num">5</div></div>
+              <div class="day-cell over"><div>二</div><div class="day-num">6</div></div>
+              <div class="day-cell today"><div>三</div><div class="day-num">7</div></div>
+              <div class="day-cell"><div>四</div><div class="day-num">8</div></div>
+              <div class="day-cell"><div>五</div><div class="day-num">9</div></div>
+              <div class="day-cell"><div>六</div><div class="day-num">10</div></div>
+              <div class="day-cell"><div>日</div><div class="day-num">11</div></div>
+            </div>
+          </div>
+
+          <div class="day-list">
+            <div class="section-title">最近 7 天</div>
+
+            <div class="day-row">
+              <div class="day-row-header">
+                <div class="day-row-title">昨天 · 周二</div>
+                <div class="day-row-status over">超标 +200</div>
+              </div>
+              <div class="day-row-detail">
+                <span><strong>2050</strong>摄入</span>
+                <span><strong>0</strong>消耗</span>
+                <span><strong>+200</strong>缺口</span>
+              </div>
+            </div>
+
+            <div class="day-row">
+              <div class="day-row-header">
+                <div class="day-row-title">周一</div>
+                <div class="day-row-status met">达标</div>
+              </div>
+              <div class="day-row-detail">
+                <span><strong>1620</strong>摄入</span>
+                <span><strong>350</strong>消耗</span>
+                <span><strong>−580</strong>缺口</span>
+              </div>
+            </div>
+
+            <div class="day-row">
+              <div class="day-row-header">
+                <div class="day-row-title">周日</div>
+                <div class="day-row-status met">达标</div>
+              </div>
+              <div class="day-row-detail">
+                <span><strong>1750</strong>摄入</span>
+                <span><strong>200</strong>消耗</span>
+                <span><strong>−300</strong>缺口</span>
+              </div>
+            </div>
+
+            <div class="day-row">
+              <div class="day-row-header">
+                <div class="day-row-title">周六</div>
+                <div class="day-row-status met">达标</div>
+              </div>
+              <div class="day-row-detail">
+                <span><strong>1820</strong>摄入</span>
+                <span><strong>0</strong>消耗</span>
+                <span><strong>−30</strong>缺口</span>
+              </div>
+            </div>
+
+            <div class="day-row">
+              <div class="day-row-header">
+                <div class="day-row-title">周五</div>
+                <div class="day-row-status over">超标 +120</div>
+              </div>
+              <div class="day-row-detail">
+                <span><strong>1970</strong>摄入</span>
+                <span><strong>0</strong>消耗</span>
+                <span><strong>+120</strong>缺口</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item">
+            <div class="nav-icon">📊</div>
+            <div>记录</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">💬</div>
+            <div>助手</div>
+          </div>
+          <div class="nav-item active">
+            <div class="nav-icon">📅</div>
+            <div>历史</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Page 4: Add Food Modal ============ -->
+    <div class="phone-wrap">
+      <div class="phone-label">添加食物（卡片记录）</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="status-bar">
+          <span>12:34</span>
+          <span class="signals">●●●● 100%</span>
+        </div>
+
+        <!-- Background recording page (peeks above modal) -->
+        <div class="content" style="opacity: 0.5;">
+          <div class="greeting">
+            <h2>下午好 ☀</h2>
+            <div class="meta">5 月 7 日 · 周三</div>
+          </div>
+          <div class="dashboard">
+            <div class="dashboard-main">
+              <div class="big-number">1230<span class="of">/ 1850</span></div>
+              <div class="progress-bar"><div class="progress-fill"></div></div>
+              <div class="dashboard-caption">今日剩余 (kcal)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scrim -->
+        <div class="scrim"></div>
+
+        <!-- Modal sheet -->
+        <div class="modal-sheet">
+          <div class="modal-handle"></div>
+          <div class="modal-header">
+            加到 <span class="accent">🌞 午餐</span>
+          </div>
+
+          <div class="modal-search">
+            <span class="icon">🔍</span>
+            <input type="text" value="板烧鸡腿堡" />
+            <span class="icon">🎙</span>
+          </div>
+
+          <div class="picked-item">
+            <div class="picked-header">
+              <div>
+                <div class="picked-name">板烧鸡腿堡</div>
+                <div class="picked-brand">麦当劳 · 标准份</div>
+              </div>
+              <div class="picked-cal">
+                <span class="num">470</span><span class="unit">kcal</span>
+              </div>
+            </div>
+
+            <div class="row first">
+              <span>份量</span>
+              <div class="stepper">
+                <div class="stepper-btn">−</div>
+                <div class="num">1</div>
+                <div class="stepper-btn">+</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <span>时间</span>
+              <span style="color: var(--text-primary);">12:30 ▾</span>
+            </div>
+
+            <div class="nutrient-row">
+              <span><strong>22g</strong>蛋白</span>
+              <span><strong>36g</strong>碳水</span>
+              <span><strong>24g</strong>脂肪</span>
+            </div>
+          </div>
+
+          <div class="confirm-btn">加入<span class="serif">470</span>kcal</div>
+        </div>
+
+        <div class="bottom-nav" style="opacity: 0.3;">
+          <div class="nav-item active">
+            <div class="nav-icon">📊</div>
+            <div>记录</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">💬</div>
+            <div>助手</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">📅</div>
+            <div>历史</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div>设计 token · 米白 + 蜜橘强调 + 抹茶辅色</div>
+    <div class="swatch-row">
+      <div class="swatch-chip" data-name="背景" style="background: #FAF7F2; border: 1px solid #EAE5DC;"></div>
+      <div class="swatch-chip" data-name="卡片" style="background: #FFFFFF; border: 1px solid #EAE5DC;"></div>
+      <div class="swatch-chip" data-name="蜜橘" style="background: #E97A45;"></div>
+      <div class="swatch-chip" data-name="抹茶" style="background: #7CA982;"></div>
+      <div class="swatch-chip" data-name="警示" style="background: #C75146;"></div>
+      <div class="swatch-chip" data-name="文字" style="background: #1A1A1A;"></div>
+    </div>
+  </div>
+</body>
+</html>
