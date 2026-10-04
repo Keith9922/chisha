@@ -1,26 +1,108 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-bg-page: #EFEAE2;
+  --color-bg-app: #FAF7F2;
+  --color-bg-card: #FFFFFF;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #6B6760;
+  --color-text-tertiary: #A8A39A;
+  --color-accent: #E97A45;
+  --color-accent-soft: #FCEEE2;
+  --color-success: #7CA982;
+  --color-success-soft: #E5EEE2;
+  --color-warning: #C75146;
+  --color-warning-soft: #FBE9E5;
+  --color-carb: #E5B85F;
+  --color-border: #EAE5DC;
+  --color-border-soft: #F0EBE2;
+
+  --font-serif: "IBM Plex Serif", Georgia, "Songti SC", serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC",
+    "Helvetica Neue", "Microsoft YaHei", sans-serif;
+
+  --shadow-card-sm: 0 1px 2px rgba(60, 50, 30, 0.04);
+  --shadow-card-md: 0 1px 3px rgba(60, 50, 30, 0.06),
+    0 6px 20px rgba(60, 50, 30, 0.05);
+
+  --radius-card: 16px;
+  --radius-card-lg: 20px;
+  --radius-card-xl: 24px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html,
+  body {
+    background: var(--color-bg-app);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* iOS PWA safe area */
+    padding-top: env(safe-area-inset-top);
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    overscroll-behavior-y: none;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* hide scrollbar inside the app shell */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  /* serif numerics helper */
+  .num {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.01em;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .card {
+    background: var(--color-bg-card);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card-sm);
+  }
+  .card-lg {
+    background: var(--color-bg-card);
+    border-radius: var(--radius-card-xl);
+    box-shadow: var(--shadow-card-md);
+  }
+  .card-empty {
+    background: transparent;
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-card);
+  }
+  .btn-primary {
+    background: var(--color-accent);
+    color: white;
+    border-radius: var(--radius-card);
+    padding: 14px 16px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 6px 16px rgba(233, 122, 69, 0.25);
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.06s ease;
+  }
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+  .section-title {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    margin-bottom: 12px;
+    padding-left: 4px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
 }

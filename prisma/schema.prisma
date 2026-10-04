@@ -1,0 +1,115 @@
+// 吃啥 / chisha — 数据模型
+// V2: 加 User 账户系统，所有数据按 user_id 隔离
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// 用户账户
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  password_hash String
+  name          String?
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  profile       Profile?
+  intakes       IntakeEntry[]
+  exercises     ExerciseEntry[]
+  weights       WeightEntry[]
+  chats         ChatMessage[]
+
+  @@index([email])
+}
+
+// 用户画像（每个用户一份）
+model Profile {
+  id              Int      @id @default(autoincrement())
+  user_id         String   @unique
+  user            User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  height_cm       Float
+  weight_kg       Float
+  age             Int
+  gender          String   // "male" | "female"
+  activity        String   // "sedentary" | "light" | "moderate" | "active"
+  goal            String   // "lose" | "maintain" | "gain"
+  budget_kcal     Int
+  protein_target  Int
+  bedtime         String   @default("23:00")
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+}
+
+// 摄入记录
+model IntakeEntry {
+  id          Int      @id @default(autoincrement())
+  user_id     String
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  food_id     String?
+  name        String
+  brand       String?
+  meal        String   // "breakfast" | "lunch" | "dinner" | "snack"
+  kcal        Int
+  protein_g   Float    @default(0)
+  carb_g      Float    @default(0)
+  fat_g       Float    @default(0)
+  portion     Float    @default(1.0)
+  consumed_at DateTime
+  day_id      String   // YYYY-MM-DD（按 02:00 截止）
+  confidence  String   @default("high")
+  source      String   @default("AI 估算")
+  reasoning   String?
+  created_at  DateTime @default(now())
+
+  @@index([user_id, day_id])
+}
+
+// 运动记录
+model ExerciseEntry {
+  id           Int      @id @default(autoincrement())
+  user_id      String
+  user         User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  type         String
+  duration_min Int
+  intensity    String
+  kcal_burned  Int
+  performed_at DateTime
+  day_id       String
+  created_at   DateTime @default(now())
+
+  @@index([user_id, day_id])
+}
+
+// 体重记录（每天最多一条）
+model WeightEntry {
+  id          Int      @id @default(autoincrement())
+  user_id     String
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  weight_kg   Float
+  day_id      String
+  recorded_at DateTime @default(now())
+  note        String?
+
+  @@unique([user_id, day_id])
+  @@index([user_id])
+}
+
+// AI 对话历史
+model ChatMessage {
+  id           Int      @id @default(autoincrement())
+  user_id      String
+  user         User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  role         String
+  content      String
+  tool_calls   String?
+  tool_call_id String?
+  created_at   DateTime @default(now())
+
+  @@index([user_id])
+}
